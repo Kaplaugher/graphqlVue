@@ -1,5 +1,17 @@
 const { ApolloServer, gql } = require('apollo-server');
 
+const mongoose = require('mongoose');
+
+require('dotenv').config({ path: 'variables.env' });
+
+const User = require('./models/User');
+const Post = require('./models/Post');
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('db connected'))
+  .catch(err => console.log(err));
+
 const todos = [
   { task: 'do things', completed: false },
   { task: 'do more', completed: false }
@@ -14,27 +26,14 @@ const typeDefs = gql`
   type Query {
     getTodos: [Todo]
   }
-
-  type Mutation {
-    addTodo(task: String, completed: Boolean): Todo
-  }
 `;
 
-const resolvers = {
-  Query: {
-    getTodos: () => todos
-  },
-  Mutation: {
-    addTodo: (_, { task, completed }) => {
-      const todo = { task, completed };
-      todos.push(todo);
-      return todo;
-    }
-  }
-};
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  context: {
+    User,
+    Post
+  }
 });
 
 server.listen().then(({ url }) => {
