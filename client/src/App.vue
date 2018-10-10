@@ -29,20 +29,14 @@
       <v-toolbar-side-icon @click="toggleSideNav()"></v-toolbar-side-icon>
       <!-- app title -->
       <v-toolbar-title class="hidden-xs-only">
-        <router-link  to="/" tag="span">
+        <router-link to="/" tag="span">
           VueShare
 
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-text-field 
-        flex 
-        prepend-icon="search" 
-        placeholder="Search Posts" 
-        color="accent" 
-        single-line 
-        hide-details>
+      <v-text-field flex prepend-icon="search" placeholder="Search Posts" color="accent" single-line hide-details>
       </v-text-field>
 
       <v-spacer></v-spacer>
@@ -60,7 +54,10 @@
     </div> -->
     <main>
       <v-container class="mt-4">
-        <router-view />
+        <transition name="fade">
+          <router-view />
+
+        </transition>
 
       </v-container>
 
@@ -94,4 +91,17 @@ export default {
 
 
 <style lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: all;
+  transition-duration: 0.25s;
+}
+.fade-enter-active {
+  transition-delay: 0.25s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+  transform: translateX(-25px);
+}
 </style>
