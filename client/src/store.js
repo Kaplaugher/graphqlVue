@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import { defaultClient as apolloClient } from './main';
+
+import { GET_POSTS } from './queries';
 import { gql } from 'apollo-boost';
 
 Vue.use(Vuex);
@@ -26,15 +28,7 @@ export default new Vuex.Store({
       // use ApolloClient to fire getPosts
       apolloClient
         .query({
-          query: gql`
-            query {
-              getPosts {
-                _id
-                title
-                imageUrl
-              }
-            }
-          `
+          query: GET_POSTS
         })
         .then(({ data }) => {
           // commit passes data from actions along to mutation function
