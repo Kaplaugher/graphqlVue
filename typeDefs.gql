@@ -40,6 +40,7 @@ type Mutation {
 }
 
 type Query {
+  getCurrentUser: User
   getPosts: [Post]
   getUser: User
 }
