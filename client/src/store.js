@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import router from './router';
 
 import { defaultClient as apolloClient } from './main';
 
@@ -10,16 +11,20 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     posts: [],
+    user: null,
     loading: false
   },
   mutations: {
     setPosts: (state, payload) => {
       state.posts = payload;
     },
-
+    setUser: (state, payload) => {
+      state.user = payload;
+    },
     setLoading: (state, payload) => {
       state.loading = payload;
-    }
+    },
+    clearUser: state => (state.user = null)
   },
   actions: {
     getCurrentUser: ({ commit }) => {
@@ -30,6 +35,7 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           commit('setLoading', false);
+          commit('setUser', data.getCurrentUser);
           console.log(data.getCurrentUser);
         })
         .catch(err => {
@@ -62,15 +68,27 @@ export default new Vuex.Store({
         })
         .then(({ data }) => {
           localStorage.setItem('token', data.signinUser.token);
-          console.log(data.signinUser);
+          // to make sure created method is crun in main.js (we run getCurrentUser)
+          router.go();
         })
         .catch(err => {
           console.error(err);
         });
+    },
+    signoutUser: async ({ commit }) => {
+      commit('clearUser');
+      //clear user and state
+      // remove token in local storage
+      localStorage.setItem('token', '');
+      // end session
+      await apolloClient.resetStore();
+      // redirect home
+      router.push('/');
     }
   },
   getters: {
     posts: state => state.posts,
+    user: state => state.user,
     loading: state => state.loading
   }
 });
