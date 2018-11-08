@@ -41,7 +41,6 @@ export default new Vuex.Store({
         .then(({ data }) => {
           commit('setLoading', false);
           commit('setUser', data.getCurrentUser);
-          console.log(data.getCurrentUser);
         })
         .catch(err => {
           commit('setLoading', false);

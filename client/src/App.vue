@@ -80,6 +80,13 @@
           <router-view />
 
         </transition>
+        <!-- Auth snackbar -->
+        <v-snackbar v-model="authSnackbar" color="success" :timeout="4000" bottom left>
+          <v-icon class="mr-3">check_circle</v-icon>
+          <h3>You are now signed in!</h3>
+          <v-btn dark flat @click="authSnackbar = false">Close</v-btn>
+
+        </v-snackbar>
 
       </v-container>
 
@@ -121,7 +128,8 @@ export default {
   },
   data() {
     return {
-      sideNav: false
+      sideNav: false,
+      authSnackbar: false
     };
   },
   methods: {
@@ -130,6 +138,16 @@ export default {
     },
     handleSignoutUser() {
       this.$store.dispatch('signoutUser');
+    }
+  },
+  watch: {
+    user(newValue, oldValue) {
+      // if we have no previous value, show snackbar
+      console.log('new value', newValue);
+      console.log('old value', oldValue);
+      if (oldValue === null) {
+        this.authSnackbar = true;
+      }
     }
   }
 };
