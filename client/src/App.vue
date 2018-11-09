@@ -88,6 +88,15 @@
 
         </v-snackbar>
 
+        <!-- auth error snackbar -->
+
+        <v-snackbar v-if="authError" v-model="authErrorSnackbar" color="info" :timeout="4000" bottom left>
+          <v-icon class="mr-3">cancel</v-icon>
+          <h3>{{authError.message}}</h3>
+          <v-btn dark flat to="/signin">Sign In</v-btn>
+
+        </v-snackbar>
+
       </v-container>
 
     </main>
@@ -98,7 +107,7 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'App',
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'authError']),
     horizontalNavItems() {
       let items = [
         { icon: 'chat', title: 'Posts', link: '/posts' },
@@ -129,7 +138,8 @@ export default {
   data() {
     return {
       sideNav: false,
-      authSnackbar: false
+      authSnackbar: false,
+      authErrorSnackbar: false
     };
   },
   methods: {
@@ -147,6 +157,12 @@ export default {
       console.log('old value', oldValue);
       if (oldValue === null) {
         this.authSnackbar = true;
+      }
+    },
+    authError(value) {
+      // if auth error, show snackbar
+      if (value !== null) {
+        this.authErrorSnackbar = true;
       }
     }
   }
