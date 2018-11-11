@@ -30,6 +30,32 @@ module.exports = {
           model: 'User'
         });
       return posts;
+    },
+    infiniteScrollPosts: async (_, { pageNum, pageSize }, { Post }) => {
+      let posts;
+      if (pageNum === 1) {
+        posts = await Post.find({})
+          .sort({ createdDate: 'desc' })
+          .populate({
+            path: 'cretedBy',
+            model: 'User'
+          })
+          .limit(pageSize);
+      } else {
+        // if page is > 1, figure out how many documents to skip
+        const skips = pageSize * (pageNum - 1);
+        posts = await Post.find({})
+          .sort({ createdDate: 'desc' })
+          .populate({
+            path: 'cretedBy',
+            model: 'User'
+          })
+          .skip(skips)
+          .limit(pageSize);
+      }
+      const totalDocs = await Post.countDocuments();
+      const hasMore = totalDocs > pageSize * pageNum;
+      return { posts, hasMore };
     }
   },
   Mutation: {

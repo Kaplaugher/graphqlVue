@@ -39,6 +39,12 @@ type Mutation {
   signupUser(username: String!, email: String!, password: String!): Token
 }
 
+type PostsPage {
+  posts: [Post]
+  hasMore: Boolean
+  infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
+}
+
 type Query {
   getCurrentUser: User
   getPosts: [Post]
