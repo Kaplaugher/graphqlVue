@@ -42,13 +42,13 @@ type Mutation {
 type PostsPage {
   posts: [Post]
   hasMore: Boolean
-  infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
 
 type Query {
   getCurrentUser: User
   getPosts: [Post]
   getUser: User
+  infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
 }
 
 type Token {
