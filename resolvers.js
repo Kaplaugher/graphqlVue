@@ -37,7 +37,7 @@ module.exports = {
         posts = await Post.find({})
           .sort({ createdDate: 'desc' })
           .populate({
-            path: 'cretedBy',
+            path: 'createdBy',
             model: 'User'
           })
           .limit(pageSize);
@@ -47,7 +47,7 @@ module.exports = {
         posts = await Post.find({})
           .sort({ createdDate: 'desc' })
           .populate({
-            path: 'cretedBy',
+            path: 'createdBy',
             model: 'User'
           })
           .skip(skips)
