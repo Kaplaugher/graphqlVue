@@ -10,6 +10,30 @@ export const GET_POSTS = gql`
   }
 `;
 
+export const GET_POST = gql`
+  query($postId: ID!) {
+    getPost(postId: $postId) {
+      _id
+      title
+      imageUrl
+      categories
+      description
+      likes
+      createdDate
+      messages {
+        _id
+        messageBody
+        messageDate
+        messageUser {
+          _id
+          username
+          avatar
+        }
+      }
+    }
+  }
+`;
+
 // USER QUERIES
 
 export const GET_CURRENT_USER = gql`

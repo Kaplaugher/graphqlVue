@@ -3,7 +3,7 @@
     <!-- Post cards -->
     <v-layout row wrap v-if="infiniteScrollPosts">
       <v-flex xs12 sm6 v-for="post in infiniteScrollPosts.posts" :key="post._id">
-        <v-card hover>
+        <v-card hover @click.native="goToPost(post._id)">
           <v-card-media :src="post.imageUrl" height="30vh" lazy>
           </v-card-media>
           <v-card-actions>
@@ -84,6 +84,9 @@ export default {
     }
   },
   methods: {
+    goToPost(postId) {
+      this.$router.push(`/posts/${postId}`);
+    },
     showMorePosts() {
       console.log('show more');
       //   fetch more data and transform original result
