@@ -6,10 +6,10 @@
         <v-card hover>
           <v-card-title>
             <h1>{{getPost.title}}</h1>
-            <v-btn large icon v-if="user" @click="handleLikePost">
-              <v-icon large color="grey">favorite</v-icon>
+            <v-btn large icon v-if="user" @click="handleToggleLike">
+              <v-icon large :color="checkIfPostLiked(getPost._id) ? 'red' : 'grey'">favorite</v-icon>
             </v-btn>
-            <h3 class="ml-3 font-weight-thin">{{getPost.likes}} Likes</h3>
+            <h3 class='ml-3 font-weight-thin'>{{getPost.likes}} Likes</h3>
             <v-spacer></v-spacer>
             <v-icon @click="goToPreviousPage" color="info" large>arrow_back</v-icon>
           </v-card-title>
@@ -89,7 +89,8 @@ export default {
   props: ['postId'],
   data() {
     return {
-      dialog: false
+      dialog: false,
+      postLiked: false
     };
   },
   apollo: {
@@ -103,7 +104,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'userFavorites'])
   },
   methods: {
     goToPreviousPage() {
@@ -112,6 +113,26 @@ export default {
     toggleImageDialog() {
       if (window.innerWidth > 500) {
         this.dialog = !this.dialog;
+      }
+    },
+    checkIfPostLiked(postId) {
+      // check if user favorites includes post with id of postId
+      if (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === postId)
+      ) {
+        this.postLiked = true;
+        return true;
+      } else {
+        this.postLiked = false;
+        return false;
+      }
+    },
+    handleToggleLike() {
+      if (this.postLiked) {
+        this.handleUnlikePost();
+      } else {
+        this.handleLikePost();
       }
     },
     handleUnlikePost() {
