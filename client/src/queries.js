@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 
+/* Posts Queries */
 export const GET_POSTS = gql`
   query {
     getPosts {
@@ -34,8 +35,7 @@ export const GET_POST = gql`
   }
 `;
 
-// USER QUERIES
-
+/* User Queries */
 export const GET_CURRENT_USER = gql`
   query {
     getCurrentUser {
@@ -50,24 +50,6 @@ export const GET_CURRENT_USER = gql`
         title
         imageUrl
       }
-    }
-  }
-`;
-
-// user mutations
-
-export const SIGNIN_USER = gql`
-  mutation($username: String!, $password: String!) {
-    signinUser(username: $username, password: $password) {
-      token
-    }
-  }
-`;
-
-export const SIGNUP_USER = gql`
-  mutation($username: String!, $email: String!, $password: String!) {
-    signupUser(username: $username, email: $email, password: $password) {
-      token
     }
   }
 `;
@@ -97,13 +79,12 @@ export const INFINITE_SCROLL_POSTS = gql`
   }
 `;
 
-// Post mutations
-
+/* Posts Mutations */
 export const ADD_POST = gql`
   mutation(
     $title: String!
     $imageUrl: String!
-    $categories: [String!]
+    $categories: [String]!
     $description: String!
     $creatorId: ID!
   ) {
@@ -119,14 +100,32 @@ export const ADD_POST = gql`
       imageUrl
       categories
       description
-      createdDate
+    }
+  }
+`;
+
+export const ADD_POST_MESSAGE = gql`
+  mutation($messageBody: String!, $userId: ID!, $postId: ID!) {
+    addPostMessage(
+      messageBody: $messageBody
+      userId: $userId
+      postId: $postId
+    ) {
+      _id
+      messageBody
+      messageDate
+      messageUser {
+        _id
+        username
+        avatar
+      }
     }
   }
 `;
 
 export const LIKE_POST = gql`
   mutation($postId: ID!, $username: String!) {
-    likePost(postId: $postId, username: $username!) {
+    likePost(postId: $postId, username: $username) {
       likes
       favorites {
         _id
@@ -139,13 +138,30 @@ export const LIKE_POST = gql`
 
 export const UNLIKE_POST = gql`
   mutation($postId: ID!, $username: String!) {
-    unlikePost(postId: $postId, username: $username!) {
+    unlikePost(postId: $postId, username: $username) {
       likes
       favorites {
         _id
         title
         imageUrl
       }
+    }
+  }
+`;
+
+/* User Mutations */
+export const SIGNIN_USER = gql`
+  mutation($username: String!, $password: String!) {
+    signinUser(username: $username, password: $password) {
+      token
+    }
+  }
+`;
+
+export const SIGNUP_USER = gql`
+  mutation($username: String!, $email: String!, $password: String!) {
+    signupUser(username: $username, email: $email, password: $password) {
+      token
     }
   }
 `;
